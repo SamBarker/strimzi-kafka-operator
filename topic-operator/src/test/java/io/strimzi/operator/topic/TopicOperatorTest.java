@@ -1167,7 +1167,7 @@ public class TopicOperatorTest {
             .compose(v -> {
                 context.verify(() -> {
                     assertCounterMatches("reconciliations", is(1.0));
-            assertCounterMatches("resources.paused", is(0.0));
+            assertGaugeMatches("resources.paused", Map.of("kind", "KafkaTopic"),  is(0.0));
             assertCounterMatches("reconciliations.successful", is(1.0));
             assertCounterValueIsZero("reconciliations.failed");
 
@@ -1184,7 +1184,7 @@ public class TopicOperatorTest {
             })
             .compose(v -> topicOperator.reconcileAllTopics("periodic")).onComplete(context.succeeding(f -> context.verify(() -> {
             assertCounterMatches("reconciliations", is(2.0));
-            assertCounterMatches("resources.paused", is(1.0));
+            assertGaugeMatches("resources.paused", Map.of("kind", "KafkaTopic"),  is(1.0));
             assertCounterMatches("reconciliations.successful", is(2.0));
             assertCounterValueIsZero("reconciliations.failed");
 
