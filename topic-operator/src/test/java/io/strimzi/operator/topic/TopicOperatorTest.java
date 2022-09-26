@@ -1140,17 +1140,17 @@ public class TopicOperatorTest {
         resourceAdded(context, null, null)
             .compose(v -> topicOperator.reconcileAllTopics("periodic"))
             .onComplete(context.succeeding(e -> context.verify(() -> {
-            assertCounterMatches("reconciliations", is(1.0));
-            assertGaugeMatches("resources.paused", Map.of("kind", "KafkaTopic"), is(0.0));
-            assertCounterValueIsZero("reconciliations.successful");
-            assertCounterValueIsZero("reconciliations.failed");
+                assertCounterMatches("reconciliations", is(1.0));
+                assertGaugeMatches("resources.paused", Map.of("kind", "KafkaTopic"), is(0.0));
+                assertCounterMatches("reconciliations.successful", is(1.0));
+                assertCounterValueIsZero("reconciliations.failed");
 
                 assertTimerMatches(1L, greaterThan(0.0));
 
                 assertGaugeMatches("resource.state",
                         Map.of("kind", "KafkaTopic",
-                            "name", topicName.toString(),
-                            "resource-namespace", "default-namespace"),
+                                "name", topicName.toString(),
+                                "resource-namespace", "default-namespace"),
                         is(1.0));
 
                 context.completeNow();
@@ -1178,7 +1178,7 @@ public class TopicOperatorTest {
                             "name", topicName.toString(),
                             "resource-namespace", "default-namespace"),
                             is(1.0));
-});
+                });
                 metadata.getAnnotations().put("strimzi.io/pause-reconciliation", "true");
                 return resourceAdded(context, null, null);
             })
